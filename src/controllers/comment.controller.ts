@@ -20,3 +20,33 @@ export const getCommentByPost = async (req: Request, res: Response) => {
         res.status(500).json({ message: err.message });
     };
 };
+
+export const getCommentById = async (req: Request, res: Response) => {
+    try {
+        const comment = await Comment.findById(req.params.id);
+        if (!comment) return res.status(404).json({ message: "Comment not found" });
+        res.json(comment);
+    } catch (err: any) {
+        res.status(500).json({ message: err.message });
+    };
+};
+
+export const updateComment = async (req: Request, res: Response) => {
+    try {
+        const comment = await Comment.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        if (!comment) return res.status(404).json({ message: "Comment not found" });
+        res.json(comment);
+    } catch (err: any) {
+        res.status(500).json({ message: err.message });
+    };
+};
+
+export const deleteComment = async (req: Request, res: Response) => {
+    try {
+        const comment = await Comment.findByIdAndDelete(req.params.id);
+        if (!comment) return res.status(404).json({ message: "Comment not found" });
+        res.json({ message: "Comment deleted successfully" });
+    } catch (err: any) {
+        res.status(500).json({ message: err.message });
+    };
+};
