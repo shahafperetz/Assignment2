@@ -4,8 +4,7 @@ export interface IUSer extends Document {
     username: string;
     email: string;
     password: string;
-    createdAt: Date;
-    updatedAt: Date;
+    refreshToken?: string;
 };
 
 const UserSchema: Schema<IUSer> = new Schema(
@@ -26,11 +25,11 @@ const UserSchema: Schema<IUSer> = new Schema(
         password: {
             type: String,
             required: true
+        }, 
+        refreshToken: {
+            type: String
         }
     },
-    {
-        timestamps: true
-    }
 );
 
 const User = mongoose.model<IUSer>('User', UserSchema);

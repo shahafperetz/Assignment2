@@ -1,15 +1,21 @@
 import { Request, Response } from "express";
 import Post from "../models/Post";
+import { AuthRequest } from "../middleware/auth.middleware";
 
-export const createPost = async (req: Request, res: Response) => {
-    try {
-        const post = new Post(req.body);
-        await post.save();
-        res.status(201).json(post);
-    } catch (err: any) {
-        res.status(500).json({ message: err.message });
-    };
+export const createPost = async (req: AuthRequest, res: Response) => {
+  try {
+    const post = new Post({
+      content: req.body.content,
+      userId: (req.user as any).userId
+    });
+
+    await post.save();
+    res.status(201).json(post);
+  } catch (err: any) {
+    res.status(500).json({ message: err.message });
+  }
 };
+
 
 export const getPosts = async (req: Request, res: Response) => {
     try {
