@@ -1,14 +1,20 @@
 import { Request, Response } from "express";
 import Comment from "../models/Comment";
+import { AuthRequest } from "../middleware/auth.middleware";
 
-export const createComment = async (req: Request, res: Response) => {
-    try {
-        const comment = new Comment(req.body);
-        await comment.save();
-        res.status(201).json(comment);
-    } catch (err: any) {
-        res.status(500).json({ message: err.message });
-    };
+export const createComment = async (req: AuthRequest, res: Response) => {
+  try {
+    const comment = new Comment({
+      text: req.body.text,
+      postId: req.body.postId,
+      userId: (req.user as any).userId
+    });
+
+    await comment.save();
+    res.status(201).json(comment);
+  } catch (err: any) {
+    res.status(500).json({ message: err.message });
+  }
 };
 
 export const getCommentByPost = async (req: Request, res: Response) => {
